@@ -29,6 +29,11 @@ class PicturesController < ApplicationController
     end
   end
 
+  def confirm
+    @picture = Picture.new(picture_params)
+    render :new if @picture.invalid?
+  end
+
   def update
     respond_to do |format|
       if @picture.update(picture_params)
