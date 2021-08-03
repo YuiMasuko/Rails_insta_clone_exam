@@ -6,11 +6,13 @@
     <% if @user.image? %>
     <%= image_tag @user.image.url if @user.image? %>
     <% end %>
-    <%= link_to("編集", edit_user_path(@user)) %>
-    <%= link_to '削除', user_path(@user), method: :delete, class: 'btn btn-danger', data: { confirm: '本当に削除しますか?' } %>
-    </div>
-    <div class="new_post">
-    <%= link_to "写真を投稿する", new_picture_path %>
+    <% if @user.id==@current_user.id %>
+      <%= link_to("編集", edit_user_path(@user)) %>
+      <%= link_to '削除', user_path(@user), method: :delete, class: 'btn btn-danger', data: { confirm: '本当に削除しますか?' } %>
+      </div>
+      <div class="new_post">
+      <%= link_to "写真を投稿する", new_picture_path %>
+    <% end %>
     </div>
   </div>
 </div>

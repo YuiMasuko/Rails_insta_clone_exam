@@ -1,11 +1,17 @@
 class PicturesController < ApplicationController
   before_action :set_picture, only: %i[ show edit update destroy ]
+  before_action :authenticate_user, only:[:edit, :update, :destroy]
 
   def index
     @pictures = Picture.all
   end
 
   def show
+    if logged_in?
+      @favorite = current_user.favorites.find_by(record_id: @record.id)
+    else
+      redirect_to new_user_path, notice:"ログインが必要です"
+    end
   end
 
   def new
@@ -23,9 +29,6 @@ class PicturesController < ApplicationController
     render :new if @picture.invalid?
   end
 
-  def edit
-  end
-
   def create
     @picture = Picture.new(picture_params)
     @picture = current_user.pictures.build(picture_params)
@@ -40,21 +43,20 @@ class PicturesController < ApplicationController
     end
   end
 
+  def edit
+  end
+
   def update
-    @picture = Picture.find(params[:id])
-    if @pisture.update(picture_params)
-      redirect_to pictures_path, notice: "ブログを編集しました！"
+    if @picture.update(pictures_params)
+      redirect_to new_picture_path, notice: "編集しました！"
     else
-      render :new
+      render :edit
     end
   end
 
   def destroy
     @picture.destroy
-    respond_to do |format|
-      format.html { redirect_to pictures_url, notice: "Picture was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to  new_picture_path
   end
 
   private
@@ -64,5 +66,10 @@ class PicturesController < ApplicationController
 
   def picture_params
     params.require(:picture).permit(:image, :image_cache, :content, :user)
+  end
+  def ensure_user
+    @pictures = current_user.pictures
+    @picture = @pictures.find_by(id: params[:id])
+    redirect_to new_picture_path unless @picture
   end
 end
