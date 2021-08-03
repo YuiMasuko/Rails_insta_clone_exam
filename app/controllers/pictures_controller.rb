@@ -10,6 +10,17 @@ class PicturesController < ApplicationController
 
   def new
     @picture = Picture.new
+    if params[:back]
+      @picture = Picture.new(picture_params)
+    else
+      @picture = Picture.new
+    end
+  end
+
+  def confirm
+    @picture = Picture.new(picture_params)
+    @picture = current_user.pictures.build(picture_params)
+    render :new if @picture.invalid?
   end
 
   def edit
@@ -17,32 +28,24 @@ class PicturesController < ApplicationController
 
   def create
     @picture = Picture.new(picture_params)
-
-    respond_to do |format|
+    @picture = current_user.pictures.build(picture_params)
+    if params[:back]
+      render :new
+    else
       if @picture.save
-        format.html { redirect_to @picture, notice: "Picture was successfully created." }
-        format.json { render :show, status: :created, location: @picture }
+        redirect_to pictures_path, notice: "投稿しました！"
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @picture.errors, status: :unprocessable_entity }
+        render :new
       end
     end
   end
 
-  def confirm
-    @picture = Picture.new(picture_params)
-    render :new if @picture.invalid?
-  end
-
   def update
-    respond_to do |format|
-      if @picture.update(picture_params)
-        format.html { redirect_to @picture, notice: "Picture was successfully updated." }
-        format.json { render :show, status: :ok, location: @picture }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @picture.errors, status: :unprocessable_entity }
-      end
+    @picture = Picture.find(params[:id])
+    if @pisture.update(picture_params)
+      redirect_to pictures_path, notice: "ブログを編集しました！"
+    else
+      render :new
     end
   end
 
@@ -60,6 +63,6 @@ class PicturesController < ApplicationController
   end
 
   def picture_params
-    params.require(:picture).permit(:image, :image_cache, :content)
+    params.require(:picture).permit(:image, :image_cache, :content, :user)
   end
 end

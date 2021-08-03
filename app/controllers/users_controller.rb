@@ -22,12 +22,22 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.name = params[:name]
     @user.email = params[:email]
+    @user.image = "#{@user.id}.jpg"
+    if params[:image]
+      image = param[:image]
+      File.binwrite("public/uploads/user/image/#{@user.image}",image.read)
+    end
     if @user.save
       flash[:notice] = "情報を編集しました！"
       redirect_to user_path(@user.id)
     else
       render :edit
     end
+  end
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+    redirect_to new_user_path, notice:"ユーザー情報を削除しました！"
   end
 
 
