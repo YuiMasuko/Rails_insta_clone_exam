@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new
   end
+
   def create
     @user = User.new(user_params)
     if @user.save
@@ -14,12 +15,19 @@ class UsersController < ApplicationController
       render :new
     end
   end
+
   def show
     @user = User.find(params[:id])
+    @pictures = @user.pictures
+
+    favorites = Favorite.where(user_id: current_user.id).pluck(:picture_id)
+    @favorite_list = Picture.find(favorites)
   end
+
   def edit
     @user = User.find(params[:id])
   end
+
   def update
     @user = User.find(params[:id])
     @user.name = params[:name]
@@ -41,7 +49,6 @@ class UsersController < ApplicationController
     @user.destroy
     redirect_to new_user_path, notice:"ユーザー情報を削除しました！"
   end
-
 
   private
   def user_params

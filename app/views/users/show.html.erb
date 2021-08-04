@@ -1,18 +1,32 @@
 <div class="main user-show">
   <div class="container">
     <div class="user">
-    <h1><%= @user.name %>のページ</h1>
-    <p>メールアドレス: <%= @user.email %></p>
-    <% if @user.image? %>
-    <%= image_tag @user.image.url if @user.image? %>
-    <% end %>
-    <% if @user.id==@current_user.id %>
-      <%= link_to("編集", edit_user_path(@user)) %>
-      <%= link_to '削除', user_path(@user), method: :delete, class: 'btn btn-danger', data: { confirm: '本当に削除しますか?' } %>
-      </div>
-      <div class="new_post">
+      <h1><%= @user.name %>のページ</h1>
+      <p>メールアドレス: <%= @user.email %></p>
+      <% if @user.image? %>
+        <%= image_tag @user.image.url if @user.image? %>
+      <% end %>
+    </div>
+    <div class="favarite_list">
+      <table>
+        <tr>
+        <% if @favorite_list.present? %>
+          <% @favorite_list.each do |picture| %>
+              <td><%= image_tag picture.image.url %></td>
+              <td><%= picture.content %></td>
+          <% end %>
+        <% end %>
+        </tr>
+      </table>
+    </div>
+    <div class="choice">
+      <% if @user.id==@current_user.id %>
+        <%= link_to("編集", edit_user_path(@user)) %>
+        <%= link_to '削除', user_path(@user), method: :delete, class: 'btn btn-danger', data: { confirm: '本当に削除しますか?' } %>
+    </div>
+    <div class="new_post">
       <%= link_to "写真を投稿する", new_picture_path %>
-    <% end %>
+      <% end %>
     </div>
   </div>
 </div>

@@ -8,7 +8,7 @@ class PicturesController < ApplicationController
 
   def show
     if logged_in?
-      @favorite = current_user.favorites.find_by(record_id: @record.id)
+      @favorite = current_user.favorites.find_by(picture_id: @picture.id)
     else
       redirect_to new_user_path, notice:"ログインが必要です"
     end
