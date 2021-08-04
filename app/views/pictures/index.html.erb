@@ -1,26 +1,15 @@
-<h1>投稿一覧</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>みんなの写真</th>
-      <th>内容</th>
-      <th>投稿者</th>
-    </tr>
-  </thead>
-
+<h1>みんなの投稿</h1>
+<%= link_to '新規投稿', new_picture_path, class: 'btn btn-primary' %>
+<br>
+<br>
   <tbody>
     <% @pictures.each do |picture| %>
       <tr>
         <td><%= image_tag picture.image.url %></td>
-        <td><%= picture.content %></td>
-        <td><%= picture.user.name %></td>
-        <td><%= link_to 'Show', picture %></td>
+        <td><%= link_to '詳しく！', picture %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to '新規投稿', new_picture_path %>
