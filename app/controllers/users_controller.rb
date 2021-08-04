@@ -30,16 +30,16 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.name = params[:name]
-    @user.email = params[:email]
-    @user.image = "#{@user.id}.jpg"
-    if params[:image]
-      image = param[:image]
-      File.binwrite("public/uploads/user/image/#{@user.image}",image.read)
-    end
-    if @user.save
+    # @user.name = params[:name]
+    # @user.email = params[:email]
+    # @user.image = "#{@user.id}.jpg"
+    # if params[:image]
+    #   image = param[:image]
+    #   File.binwrite("public/uploads/user/image/#{@user.image}",image.read)
+    # end
+    if @user.update(user_params)
       flash[:notice] = "情報を編集しました！"
-      redirect_to user_path(@user.id)
+      redirect_to user_path
     else
       render :edit
     end
